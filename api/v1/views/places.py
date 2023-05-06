@@ -142,9 +142,11 @@ def places_search():
         places = storage.all(Place).values()
         list_places = []
         for place in places:
-            list_places.append(place.to_dict())
+            place_dict = place.to_dict()
+            place_dict['first_name'] = place.user.first_name
+            place_dict['last_name'] = place.user.last_name
+            list_places.append(place_dict)
         return jsonify(list_places)
-
     list_places = []
     if states:
         states_obj = [storage.get(State, s_id) for s_id in states]
