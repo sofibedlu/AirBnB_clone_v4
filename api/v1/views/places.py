@@ -176,6 +176,8 @@ def places_search():
     places = []
     for p in list_places:
         d = p.to_dict()
+        d['first_name'] = p.user.first_name
+        d['last_name'] = p.user.last_name
         d.pop('amenities', None)
         places.append(d)
 
