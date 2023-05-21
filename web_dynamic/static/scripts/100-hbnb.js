@@ -1,6 +1,35 @@
 $(document).ready(function () {
+  const statesChecked = {};
+  const citiesChecked = {};
   const amenitiesChecked = {};
-  $('input[type="checkbox"]').on('change', function () {
+  $('input.chekedin').on('change', function () {
+    const isChecked = $(this).is(':checked');
+    const Id = $(this).data('id');
+    const Name = $(this).data('name');
+
+    if (isChecked) {
+      if ($(this).attr('id') === 'statechek') {
+        statesChecked[Id] = Name;
+      } else {
+        citiesChecked[Id] = Name;
+      }
+    } else {
+      if ($(this).attr('id') === 'statechek') {
+        delete statesChecked[Id];
+      } else {
+        delete citiesChecked[Id];
+      }
+    }
+
+    const checkedStates = Object.values(statesChecked);
+    const checkedCities = Object.values(citiesChecked);
+    const statesList = checkedStates.join(', ');
+    const citiesList = checkedCities.join(', ');
+    const filter = statesList + ' ' + citiesList;
+    $('#stateCity').text(filter);
+  });
+
+  $('input.amenitychek').on('change', function () {
     const isChecked = $(this).is(':checked');
     const amenityId = $(this).data('id');
     const amenityName = $(this).data('name');
@@ -25,10 +54,22 @@ $(document).ready(function () {
   });
 
   $('button').click(function () {
-    if (Object.keys(amenitiesChecked).length !== 0) {
+    if (Object.keys(amenitiesChecked).length !== 0 || 
+        Object.keys(statesChecked).length !== 0 ||
+        Object.keys(citiesChecked).length !== 0) {
       const data = {};
       const checkedAmenitiesId = Object.keys(amenitiesChecked);
-      data['amenities'] = checkedAmenitiesId;
+      const checkedStatesId = Object.keys(statesChecked);
+      const checkedCitiesId = Object.keys(citiesChecked);
+      if (checkedAmenitiesId.length !== 0) {
+        data.amenities = checkedAmenitiesId;
+      }
+      if (checkedStatesId.length !== 0) {
+        data.states = checkedStatesId;
+      }
+      if (checkedCitiesId.length !== 0) {
+        data.cities = checkedCitiesId;
+      }
       filterPlaces(data);
     }
   });

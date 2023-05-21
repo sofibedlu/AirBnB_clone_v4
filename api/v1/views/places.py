@@ -145,6 +145,10 @@ def places_search():
             place_dict = place.to_dict()
             place_dict['first_name'] = place.user.first_name
             place_dict['last_name'] = place.user.last_name
+            list_amenities = []
+            for amenity in place.amenities:
+                list_amenities.append(amenity.to_dict())
+            place_dict['list_amenities'] = list_amenities
             list_places.append(place_dict)
         return jsonify(list_places)
     list_places = []
@@ -178,6 +182,10 @@ def places_search():
         d = p.to_dict()
         d['first_name'] = p.user.first_name
         d['last_name'] = p.user.last_name
+        list_amenities = []
+        for amenity in p.amenities:
+            list_amenities.append(amenity.to_dict())
+        d['list_amenities'] = list_amenities
         d.pop('amenities', None)
         places.append(d)
 
